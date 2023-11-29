@@ -1,6 +1,8 @@
 package com.example.dao;
 
 import com.example.models.UserC;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -36,6 +38,26 @@ public class userDAOImpl implements IuserDAO{
     @Override
     public void userUpdate(UserC user) {
 
+    }
+
+    @Override
+    public UserC getUser(Long id) {
+        return entityManager.find(UserC.class,id);
+    }
+
+    @Override
+    public boolean checkCredentials(UserC user) {
+        String query ="FROM UserC where email = :email";
+        Argon2 arg2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+
+        List <UserC> lista = entityManager.createQuery(query)
+                .setParameter("email",user.getEmail())
+                .getResultList();
+
+        if (lista.isEmpty()){
+            return false;
+        }
+        return arg2.verify(lista.get(0).getPassword(),user.getPassword());
     }
 
 }

@@ -3,24 +3,30 @@ window.addEventListener('DOMContentLoaded', event => {
 });
 
 async function registerUser(){
-        const response = await fetch('api/listUsers', {
-          method: 'GET', // *GET, POST, PUT, DELETE, etc.
-          headers: {
-            'Accept':'application/json',
-            'Content-Type': 'application/json'
-          },
-         });
-        const users = await response.json();
-        console.log(users);
 
-        let listUsersHtml='';
-        for (let u of users)
-        {
-            let btnDelete='<a href ="#" onclick="deleteUser('+u.id+')" class="btn btn-danger btn btn-circle btn-sm"><i class="fas fa-trash"></i></a>';
+    let user = {};
+    
+    user.name=document.getElementById('inputFirstName').value;
+    user.lastname=document.getElementById('inputLastName').value;
+    user.phonenumber=document.getElementById('inputPhoneNumber').value;
+    user.email=document.getElementById('inputEmail').value;
+    user.password=document.getElementById('inputPassword').value;
 
-            let user ='<tr><td>'+u.id+'</td><td>'+u.name+'</td><td>'+u.lastname+'</td><td>'+u.email+'</td><td>'+u.phonenumber+'</td><td>'+u.password+'</td>'+'<td>'+btnDelete+'</td></tr>';
-            listUsersHtml+=user;
-        }
-        document.querySelector('#userTable tbody').outerHTML = listUsersHtml;
+    let passwordConfirm=document.getElementById('inputPasswordConfirm').value;
 
+    if (passwordConfirm != user.password){
+      alert('La confirmación de contraseña no coincide');
+      return;
+    }
+    
+
+    const response = await fetch ('api/userRegister', {
+    method: 'POST',
+    headers: {
+      'Accept':'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(user)
+    });
+    
     }

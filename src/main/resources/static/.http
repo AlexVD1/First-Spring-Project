@@ -1,0 +1,15 @@
+GET http://localhost:8080/api/listUsers HTTP/1.1
+content-type: application/json
+
+
+###
+POST http://localhost:8080/api/userRegister
+content-type: application/json 
+accept: application/json'
+{
+    "name": "edy",
+    "lastname": "rio",
+    "email":"erico@gmail.com",
+    "phonenumber":"2142341",
+    "password":"1234"
+}
