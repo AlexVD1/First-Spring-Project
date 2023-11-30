@@ -1,7 +1,6 @@
 package com.example.dao;
 
 import com.example.models.UserC;
-import org.apache.catalina.User;
 
 import java.util.List;
 

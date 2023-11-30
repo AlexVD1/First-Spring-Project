@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -22,9 +21,16 @@ public class UserRestController {
 	@Autowired
 	private JWTUtil jwtUtil;
 
+	public boolean validarToken(String token){
+		String userID=jwtUtil.getKey(token);
+		return userID != null;
+	}
 
 	 @GetMapping("/api/user/{id}")
-	 public UserC getUser(@PathVariable Long id){
+	 public UserC getUser(@PathVariable Long id,@RequestHeader(value = "Authorization") String token){
+		 if (!validarToken(token)){
+			 return null;
+		 }
 		 return userDAO.getUser(id);
 	 }
 
@@ -39,20 +45,20 @@ public class UserRestController {
 	}
 
 	@DeleteMapping("/api/userDelete/{id}")
-	public void deleteUser(@PathVariable Long id)
+	public void deleteUser(@PathVariable Long id,@RequestHeader(value = "Authorization") String token)
 	{
+		if (!validarToken(token)){
+			return;
+		}
 		userDAO.userDelete(id);
 	}
 
 	@GetMapping("/api/listUsers")
 	public List<UserC> listUsers(@RequestHeader(value = "Authorization") String token){
-
-		String userID=jwtUtil.getKey(token);
-
-		if (userID==null){
-			return new ArrayList<>();
+		if (!validarToken(token)){
+			return null;
 		}
-
+		log.info("mensaje "+ validarToken((token)));
 		return userDAO.listUsers();
 	}
 

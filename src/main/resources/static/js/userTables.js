@@ -2,18 +2,29 @@ window.addEventListener('DOMContentLoaded', event => {
     // Simple-DataTables
     // https://github.com/fiduswriter/Simple-DataTables/wiki
     loadUsers();
+    loadEmail();
     const userTable = document.getElementById('userTable');
     if (userTable) {
         new simpleDatatables.DataTable(userTable);
     }
 });
 
+function loadEmail (){
+  document.getElementById("showEmail").outerHTML=localStorage.email;
+}
+
 function getHeaders(){
   return {
     'Accept':'application/json',
     'Content-Type': 'application/json',
-    'Authorization':localStorage.token
+    'Authorization': localStorage.token
   }
+}
+
+function logout(){
+  localStorage.email='';
+  localStorage.token='';
+  window.location.href="login.html";
 }
 
 async function loadUsers(){
