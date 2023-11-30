@@ -9,7 +9,7 @@ window.addEventListener('DOMContentLoaded', event => {
         data.email=document.getElementById('inputEmail').value;
         data.password=document.getElementById('inputPassword').value;        
     
-        const response = await fetch ('api/login', {
+        const request = await fetch ('api/login', {
         method: 'POST',
         headers: {
           'Accept':'application/json',
@@ -18,15 +18,18 @@ window.addEventListener('DOMContentLoaded', event => {
         body: JSON.stringify(data)
         });
         
-        const r = await response.json();
-        console.log(r);
+        const response = await request.text();
+        console.log(response);
 
-        if(!r){
-            alert("WRONG CREDENTIALS");
-            return;
+        if(response!='Failed'){
+          localStorage.token=response; 
+          localStorage.email=data.email;      
+          window.location.href="users.html";
+        }
+        else{
+          alert("WRONG CREDENTIALS");
         }
         
-        window.location.href="users.html";
 
         }
     

@@ -8,13 +8,18 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 });
 
+function getHeaders(){
+  return {
+    'Accept':'application/json',
+    'Content-Type': 'application/json',
+    'Authorization':localStorage.token
+  }
+}
+
 async function loadUsers(){
         const response = await fetch('api/listUsers', {
           method: 'GET', // *GET, POST, PUT, DELETE, etc.
-          headers: {
-            'Accept':'application/json',
-            'Content-Type': 'application/json'
-          },
+          headers: getHeaders()
          });
         const users = await response.json();
         console.log(users);
@@ -37,10 +42,7 @@ if (confirm('SURE?'))
 {
 const response = await fetch('api/userDelete/'+id, {
            method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
-           headers: {
-             'Accept':'application/json',
-             'Content-Type': 'application/json'
-           },
+           headers: getHeaders()
           });
    alert('User deleted');
 }

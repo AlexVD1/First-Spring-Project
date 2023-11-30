@@ -2,12 +2,14 @@ package com.example.controller;
 
 import com.example.dao.IuserDAO;
 import com.example.models.UserC;
+import com.example.utils.JWTUtil;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -16,6 +18,9 @@ public class UserRestController {
 
 	@Autowired
 	private IuserDAO userDAO;
+
+	@Autowired
+	private JWTUtil jwtUtil;
 
 
 	 @GetMapping("/api/user/{id}")
@@ -40,7 +45,13 @@ public class UserRestController {
 	}
 
 	@GetMapping("/api/listUsers")
-	public List<UserC> listUsers(){
+	public List<UserC> listUsers(@RequestHeader(value = "Authorization") String token){
+
+		String userID=jwtUtil.getKey(token);
+
+		if (userID==null){
+			return new ArrayList<>();
+		}
 
 		return userDAO.listUsers();
 	}

@@ -16,7 +16,7 @@ public interface IuserDAO {
 
     UserC getUser(Long id);
 
-    boolean checkCredentials(UserC user);
+    UserC checkCredentials(UserC user);
 /*    UserC getUser();
     UserC updateUser();
     UserC deleteUser();

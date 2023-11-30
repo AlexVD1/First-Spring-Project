@@ -46,7 +46,7 @@ public class userDAOImpl implements IuserDAO{
     }
 
     @Override
-    public boolean checkCredentials(UserC user) {
+    public UserC checkCredentials(UserC user) {
         String query ="FROM UserC where email = :email";
         Argon2 arg2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
 
@@ -55,9 +55,13 @@ public class userDAOImpl implements IuserDAO{
                 .getResultList();
 
         if (lista.isEmpty()){
-            return false;
+            return null;
         }
-        return arg2.verify(lista.get(0).getPassword(),user.getPassword());
+        if (arg2.verify(lista.get(0).getPassword(),user.getPassword()))
+        {
+            return lista.get(0);
+        }
+        return null;
     }
 
 }
